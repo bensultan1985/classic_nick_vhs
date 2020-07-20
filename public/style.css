@@ -1,0 +1,9 @@
+#header {
+    display: grid;
+    grid-gap: 50px 100px;
+    background: orange;
+}
+
+#content {
+    background: rgb(86, 231, 57);
+}
