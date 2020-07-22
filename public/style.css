@@ -36,3 +36,9 @@ body {
 #query-submit {
     filter: none;
 }
+
+.results-li {
+    margin: 10px;
+    padding: 10px;
+    background: white;
+}

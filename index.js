@@ -4,8 +4,12 @@ const path = require('path')
 const fetch = require('node-fetch');
 const bodyparser = require('body-parser')
 
+
+//establish connection on the web or localhost 5000
 const PORT = process.env.PORT || 5000;
 
+
+//log is created when server starts
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));
 
 //get request for website
@@ -16,13 +20,12 @@ app.listen(PORT, () => console.log(`server started on port ${PORT}`));
 //static folder
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('/mysql/tapes', (req, res) => {
-    res.json(tapeInfo);
-})
-
+//necessary for mysql
 var mysql = require('mysql');
 const { RSA_NO_PADDING } = require('constants');
+const { runInNewContext } = require('vm');
 
+//amazon AWS database connection information
 const db = mysql.createConnection({
   host     : 'nickdbtest.cxkqmpzoak7c.us-west-1.rds.amazonaws.com',
   user     : 'root',
@@ -36,6 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(bodyparser.json())
 
+//establish a connection with the MySQL database hosted on Amazon AWS
 db.connect(function(err) {
   if (err) {
     console.error('Database connection failed: ' + err.stack);
@@ -44,18 +48,21 @@ db.connect(function(err) {
   console.log('Connected to database.');
 });
 
-// app.get('/getrequest', (req, res) => {
-//   console.log(req)
-//   let sql = `SELECT * from vhscol where release_year = ${req.query};`
-// db.query(sql, (err, result) => {
-//     // if(err) throw err;
-//     res.send(result)
-//   })
-// })
-
+//all queries are routed through /getrequest
 app.post('/getrequest', (req, res) => {
+  let sql = '';
   console.log(req.body.queryString)
-  let sql = `SELECT * from vhscol where series_title = '${req.body.queryString}';`
+  //checks for 'view all' condition
+  if (req.body.queryString == 'view all') {
+    sql = `SELECT * from vhscol;`
+    // else, return only relevant content
+  } else {
+  sql = `
+  SELECT *
+  FROM vhscol
+  WHERE series_title LIKE '%${req.body.queryString}%' or release_title LIKE '%${req.body.queryString}%' or release_year LIKE '%${req.body.queryString}%' or tags LIKE '%${req.body.queryString}%' or summary LIKE '%${req.body.queryString}%';`
+  }
+  //send query to the database
 db.query(sql, (err, result) => {
     if(err) throw err;
     console.log(result)
@@ -63,12 +70,21 @@ db.query(sql, (err, result) => {
   })
 })
 
-  // app.post('/getrequest', async (req, res) => {
-  //   console.log(req.method)
-  //   console.log(req.body.queryString)
-  //   let sql = `SELECT * from vhscol where release_year = ${req.body.queryString};`
-  //   let response = await db.query(sql, (err, result) => {console.log('querying...')}).then(res => res.json());
-  //   await res.send(response);
-  //   })
-
-// db.end();
+// //all queries are routed through /getrequest
+// app.post('/getrequest', (req, res) => {
+//   let sql = '';
+//   console.log(req.body.queryString)
+//   //checks for 'view all' condition
+//   if (req.body.queryString == 'view all') {
+//     sql = `SELECT * from vhscol;`
+//     // else, return only relevant content
+//   } else {
+//   sql = `SELECT * from vhscol where series_title = '${req.body.queryString}';`
+//   }
+//   //send query to the database
+// db.query(sql, (err, result) => {
+//     if(err) throw err;
+//     console.log(result)
+//     res.send(result)
+//   })
+// })

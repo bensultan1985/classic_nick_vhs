@@ -1,6 +1,7 @@
 let queryInput = document.getElementById('query-input')
 let querySubmit = document.getElementById('query-submit')
 let results = document.getElementById('results')
+let content = document.getElementById('content')
 
 const getQuery = () => {
     results.innerHTML = '';
@@ -15,10 +16,13 @@ const getQuery = () => {
         },
         body: JSON.stringify({'queryString': queryString})
         });
-        const content = await rawResponse.json();
-        console.log(content);
-        for (let i = 0; i < content.length; i++) {
-            results.innerHTML = `<div>${content[i].id}<br>${content[i].series_title}<br>${content[i].release_title}</div>`
+        const data = await rawResponse.json();
+        console.log(data);
+        for (let i = 0; i < data.length; i++) {
+            let newResult = document.createElement('div');
+            newResult.className = 'results-li'
+            newResult.innerHTML = `<div class="series">series: ${data[i].series_title}</div><div class="release">VHS title: ${data[i].release_title}</div><div class="year">release year: ${data[i].release_year}</div><div class="summary">summary: ${data[i].summary}</div><div>The current estimated value of this VHS is: $${data[i].price_value}</div>`
+            results.appendChild(newResult)
         }
     })();
 }
