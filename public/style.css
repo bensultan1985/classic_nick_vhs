@@ -1,9 +1,38 @@
+body {
+    background: rgb(24, 201, 24);
+    padding: 0px;
+    margin: 0px;
+}
+
 #header {
+    padding-top: 30px;
+    margin: 0px;
     display: grid;
     grid-gap: 50px 100px;
-    background: orange;
+    /* background: orange; */
+    background-image: url('orangeslime.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 180px;
+    font-size: 30px;
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 2px rgb(238, 233, 162);
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
 #content {
-    background: rgb(86, 231, 57);
+    min-height: 200px;
+    margin: 40px;
+    padding: 10px;
+    /* max-width: 500px; */
+    border-radius: 25px;
+    background: white;
+}
+
+#query-input {
+    filter: none;
+}
+#query-submit {
+    filter: none;
 }
