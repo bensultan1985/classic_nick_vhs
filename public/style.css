@@ -5,6 +5,8 @@ body {
 }
 
 #header {
+    position: relative;
+    z-index: 5;
     padding-top: 30px;
     margin: 0px;
     display: grid;
@@ -22,12 +24,16 @@ body {
 }
 
 #content {
+    position: relative;
+    top: -24px;
     min-height: 200px;
-    margin: 40px;
+    margin: auto;
+    margin-bottom: 20px;
     padding: 10px;
-    /* max-width: 500px; */
+    max-width: 1000px;
     border-radius: 25px;
     background: white;
+    /* z-index: -10; */
 }
 
 #query-input {
@@ -38,7 +44,15 @@ body {
 }
 
 .results-li {
-    margin: 10px;
+    margin: auto;
+    /* margin: 10px; */
+    margin-bottom: 14px;
     padding: 10px;
     background: white;
+    max-width: 900px;
+}
+
+.results-image {
+    max-width: 200px;
+    height: auto;
 }
